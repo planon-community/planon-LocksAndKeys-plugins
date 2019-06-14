@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>edu.calpoly.afd.planon.pom</groupId>
+    <artifactId>pomBase</artifactId>
+    <version>1</version>
+  </parent>
+  
+  <groupId>edu.calpoly.afd.planon</groupId>
+  <artifactId>LocksAndKeys-SX</artifactId>
+  <version>1.1.0</version>
+  <name>Locks and Keys SX Plugins</name>
+  
+  <properties>
+    <ux.api.version>1.6.9.0-1</ux.api.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>edu.calpoly.afd.planon.lib</groupId>
+      <artifactId>PL-CP-Utils</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.calpoly.afd.planon.lib</groupId>
+      <artifactId>PL-CP-SX-Utils</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+  </dependencies>
+  
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven.bundle.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <instructions>
+            <Implementation-Version>${project.version}</Implementation-Version>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Planon-UserExtension>1.0.0</Planon-UserExtension>
+            <Planon-TaskUserExtension>1.0.0</Planon-TaskUserExtension>
+            <!--Add the TaskUserExtension class names in the following tag Planon-ITaskUserExtension 
+              separated by comma. -->
+            <Planon-ITaskUserExtension />
+            <!-- Add the UserExtension class names in the following tag Planon-IUserExtension 
+              separated by comma. No need of Activator. -->
+            <Planon-IUserExtension>edu.calpoly.afd.planon.locksandkeys.sx.KeyIssueAddReturnedBySX,edu.calpoly.afd.planon.locksandkeys.sx.KeysEnforceUniqueSX</Planon-IUserExtension>
+            <Private-Package>edu.calpoly.afd.planon.locksandkeys.sx.*</Private-Package>
+            <Export-Package>!edu.calpoly.afd.planon.locksandkeys.sx.*</Export-Package>
+            <Import-Package>nl.planon.hades.userextension.uxinterface,
+              *</Import-Package>
+            <Embed-Dependency>PL-CP-Utils,PL-CP-SX-Utils;scope=!provided</Embed-Dependency>
+            <Embed-Directory>lib</Embed-Directory>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
