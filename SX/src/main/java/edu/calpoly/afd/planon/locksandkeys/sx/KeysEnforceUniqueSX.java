@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import edu.calpoly.afd.planon.lib.BaseSX;
 import edu.calpoly.afd.planon.lib.exception.PropertyNotDefined;
+import edu.calpoly.afd.planon.lib.exception.SXException;
 import nl.planon.hades.userextension.uxinterface.*;
 
 public class KeysEnforceUniqueSX extends BaseSX {
@@ -13,9 +14,12 @@ public class KeysEnforceUniqueSX extends BaseSX {
 		super(DESCRIPTION);
 	}
 
-	public void execute(IUXBusinessObject newBO, IUXBusinessObject oldBO, IUXContext context, String parameters) throws PropertyNotDefined, IOException {
+	public void execute(IUXBusinessObject newBO, IUXBusinessObject oldBO, IUXContext context, String parameters) throws PropertyNotDefined, SXException, IOException {
 		IUXIntegerField newSeqNumFd = newBO.getIntegerFieldByName("SequenceNumber");
 		
+		//Check for valid BO types
+		this.checkBOType(newBO, "Key");
+				
 		//only look if the SequenceNumber changed and not empty
     	if(newSeqNumFd.isChanged() && !newSeqNumFd.isEmpty()) {
     		Integer newSeqNum = newSeqNumFd.getValueAsInteger();
