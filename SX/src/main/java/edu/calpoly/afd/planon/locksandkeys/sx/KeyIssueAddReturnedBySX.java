@@ -29,5 +29,11 @@ public class KeyIssueAddReturnedBySX extends BaseSX {
 			
 			returnByRef.setValueAsBO(person);
 		}
+		//If returnDateFieldName cleared out
+		else if(!oldBO.getFieldByName(returnDateFieldName).isEmpty() && newBO.getFieldByName(returnDateFieldName).isEmpty()) {
+			IUXReferenceField returnByRef = newBO.getReferenceFieldByName(returnedByPersonFieldName);
+			
+			returnByRef.clear();
+		}
 	}
 }

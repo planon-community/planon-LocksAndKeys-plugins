@@ -13,7 +13,7 @@
   
   <groupId>edu.calpoly.afd.planon.locksandkeys.sx</groupId>
   <artifactId>LocksAndKeys-SX</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <packaging>bundle</packaging>
   
   <name>Locks and Keys SX Plugins</name>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>edu.calpoly.afd.planon.lib</groupId>
       <artifactId>PL-CP-SX-Utils</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.0</version>
     </dependency>
   </dependencies>
   
