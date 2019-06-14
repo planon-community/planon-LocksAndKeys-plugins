@@ -9,7 +9,7 @@ import nl.planon.hades.userextension.uxinterface.*;
 
 
 public class KeyIssueAddReturnedBySX extends BaseSX {
-	private static final String DESCRIPTION = "KeyIssueAddReturnedBy--This SX will add a reference to the person that exceutes a key/keyset return.";
+	private static final String DESCRIPTION = "KeyIssueAddReturnedBy--This SX will add a reference to the person that executes a key/keyset return.";
 	
 	public KeyIssueAddReturnedBySX() {
 		super(DESCRIPTION);
