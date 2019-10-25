@@ -1,9 +1,8 @@
 package edu.calpoly.afd.planon.locksandkeys.sx.settings;
 
 import java.io.IOException;
-import edu.calpoly.afd.planon.lib.BaseProperties;
-import edu.calpoly.afd.planon.lib.exception.PropertyNotDefined;
-
+import edu.planon.lib.common.BaseProperties;
+import edu.planon.lib.common.exception.PropertyNotDefined;
 
 public class SettingsKeyIssueAddReturnedBy extends BaseProperties {
 	private static final long serialVersionUID = 9132704086803252525L;

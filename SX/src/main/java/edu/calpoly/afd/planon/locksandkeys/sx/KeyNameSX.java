@@ -1,15 +1,13 @@
 package edu.calpoly.afd.planon.locksandkeys.sx;
 
 import java.io.IOException;
-
-import edu.calpoly.afd.planon.lib.BaseSX;
-import edu.calpoly.afd.planon.lib.exception.PropertyNotDefined;
-import edu.calpoly.afd.planon.lib.exception.SXException;
-import edu.calpoly.afd.planon.locksandkeys.sx.settings.SettingsKeyName;
+import edu.planon.lib.sx.BaseSX;
+import edu.planon.lib.sx.exception.SXException;
+import edu.planon.lib.common.exception.PropertyNotDefined;
 import nl.planon.hades.userextension.uxinterface.*;
 
 public class KeyNameSX extends BaseSX {
-	private static final String DESCRIPTION = "KeyNameSX--This SX copies the KeyDefinition & Sequence Number into the Key.Name field.";
+	private static final String DESCRIPTION = "KeyNameSX--This SX copies the KeyDefinition into the Key.Name field and the SequenceNumber into the Code field.";
 	
 	public KeyNameSX() {
 		super(DESCRIPTION);
@@ -18,45 +16,49 @@ public class KeyNameSX extends BaseSX {
 	@Override
 	protected void execute(IUXBusinessObject newBO, IUXBusinessObject oldBO, IUXContext context, String parameters)
 			throws PropertyNotDefined, SXException, IOException {
-		SettingsKeyName settings = new SettingsKeyName(parameters);
-		
-		String keyDescriptionFieldName = settings.getKeyDescriptionField();
-		
 		//Check for valid BO types
 		this.checkBOType(newBO, "Key", "KeyDefinition");
 		
+		//If Key
 		if(newBO.getTypeName() == "Key") {
 			IUXIntegerField seqNumField = newBO.getIntegerFieldByName("SequenceNumber");
 			IUXReferenceField keyDefRefField = newBO.getReferenceFieldByName("KeyDefinitionRef");
 			IUXStringField keyDefCodeField = keyDefRefField.getValueAsBO().getStringFieldByName("Code");
-			IUXStringField keyDescriptionField = newBO.getStringFieldByName(keyDescriptionFieldName);
+			String keyDefCode = keyDefCodeField.getValueAsString();
 			
-			if(oldBO == null || seqNumField.isChanged() || keyDefRefField.isChanged()) {
-				keyDescriptionField.setValueAsString(keyDefCodeField.getValueAsString() + ", #" + seqNumField.getValueAsString());	
+			//Update Code
+			if(oldBO == null || seqNumField.isChanged() ) {
+				newBO.getStringFieldByName("Code").setValueAsString(seqNumField.getValueAsString());
+			}
+			
+			//Update Name
+			if(oldBO == null || keyDefRefField.isChanged()) {
+				IUXStringField keyNameField = newBO.getStringFieldByName("Name");
+				int maxKeyNameLen = keyNameField.getFieldDefinition().getInputLength();
+				
+				keyNameField.setValueAsString(keyDefCode.substring(0, Math.min(keyDefCode.length(), maxKeyNameLen)));
 			}
 		}
 		
+		//If KeyDefinition
 		if(newBO.getTypeName() == "KeyDefinition") {
-			IUXStringField codeField = newBO.getStringFieldByName("Code");
-			String keyDefStr = codeField.getValueAsString();
+			IUXStringField keyDefCodeField = newBO.getStringFieldByName("Code");
+			String keyDefCode = keyDefCodeField.getValueAsString();
 			
-			if(codeField.isChanged()) {
+			if(keyDefCodeField.isChanged()) {
 				IUXAssociation keys = newBO.getAssociationByName("Key|KeyDefinitionRef");
 				
 				keys.forEach((key) -> {
 					if(!key.isArchived()) {
-						IUXIntegerField seqNumField = key.getIntegerFieldByName("SequenceNumber");
-						IUXStringField keyDescriptionField = key.getStringFieldByName(keyDescriptionFieldName);
+						IUXStringField keyNameField = key.getStringFieldByName("Name");
+						int maxKeyNameLen = keyNameField.getFieldDefinition().getInputLength();
 						
-						keyDescriptionField.setValueAsString(keyDefStr + ", #" + seqNumField.getValueAsString());
+						keyNameField.setValueAsString(keyDefCode.substring(0, Math.min(keyDefCode.length(), maxKeyNameLen)));
 						key.save();
 					}
 				});
 			}
-			
-			
 		}
-
 	}
 
 }

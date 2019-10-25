@@ -1,10 +1,9 @@
 package edu.calpoly.afd.planon.locksandkeys.sx;
 
 import java.io.IOException;
-
-import edu.calpoly.afd.planon.lib.BaseSX;
-import edu.calpoly.afd.planon.lib.exception.PropertyNotDefined;
-import edu.calpoly.afd.planon.lib.exception.SXException;
+import edu.planon.lib.sx.BaseSX;
+import edu.planon.lib.sx.exception.SXException;
+import edu.planon.lib.common.exception.PropertyNotDefined;
 import nl.planon.hades.userextension.uxinterface.*;
 
 public class KeysEnforceUniqueSX extends BaseSX {
@@ -48,10 +47,6 @@ public class KeysEnforceUniqueSX extends BaseSX {
 		    		context.addError(909, "The SequenceNumber can't be the same as another key of the same KeyDefinition.");
 		    	}
 	    	}
-	    }
-	    
-	    if(oldBO != null) {
-	    	
 	    }
 	}
 }
