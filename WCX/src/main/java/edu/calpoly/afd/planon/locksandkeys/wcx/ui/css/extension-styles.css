@@ -1,0 +1,14 @@
+.BulkAddKeysExtensionPanel .modalwindow {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0 !important;
+}
+.BulkAddKeysExtensionPanel label.radio-block{
+    display:inline-block;
+}
+.BulkAddKeysExtensionPanel .BOGrid .fields-group-container:first-child{
+    margin-top:0;
+}
+.BulkAddKeysExtensionPanel .BOGrid .fields-group-container:last-child{
+    margin-bottom:15px;
+}
