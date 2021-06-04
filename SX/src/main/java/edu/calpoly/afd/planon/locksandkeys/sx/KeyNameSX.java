@@ -26,16 +26,37 @@ public class KeyNameSX extends BaseSX {
 			IUXStringField keyDefCodeField = keyDefRefField.getValueAsBO().getStringFieldByName("Code");
 			String keyDefCode = keyDefCodeField.getValueAsString();
 			
+			IUXStringField codeField = newBO.getStringFieldByName("Code");
+			IUXStringField keyNameField = newBO.getStringFieldByName("Name");
+			
 			//Update Code
 			if(oldBO == null || seqNumField.isChanged() ) {
-				newBO.getStringFieldByName("Code").setValueAsString(seqNumField.getValueAsString());
+				//if we don't have a seqNumField we have to calculate it ourselves 
+				if(seqNumField.isEmpty()) {
+					Integer seqNum = 1;
+					
+					IUXDatabaseQueryBuilder qBldr = context.getBODatabaseQueryBuilder("Key");
+					qBldr.addSelectField("SequenceNumber");
+					qBldr.addSearchField("KeyDefinitionRef");
+					qBldr.addOrderByDef("SequenceNumber", false);
+					IUXDatabaseQuery dbQuery = qBldr.build();
+					dbQuery.getReferenceSearchExpression("KeyDefinitionRef", UXOperator.EQUAL).setValueByLookup(keyDefCode);
+					IUXResultSet resultSet = dbQuery.executeAll();
+					if(resultSet.first()) {
+						seqNum = resultSet.getInteger("SequenceNumber") + 1;
+					}
+					
+					codeField.setValueAsString(seqNum.toString());
+					seqNumField.setValueAsInteger(seqNum);
+				}
+				else {
+					codeField.setValueAsString(seqNumField.getValueAsString());
+				}
 			}
 			
 			//Update Name
 			if(oldBO == null || keyDefRefField.isChanged()) {
-				IUXStringField keyNameField = newBO.getStringFieldByName("Name");
 				int maxKeyNameLen = keyNameField.getFieldDefinition().getInputLength();
-				
 				keyNameField.setValueAsString(keyDefCode.substring(0, Math.min(keyDefCode.length(), maxKeyNameLen)));
 			}
 		}
