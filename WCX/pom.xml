@@ -3,33 +3,39 @@
   <properties>
     <groupId>edu.calpoly.afd.planon.locksandkeys</groupId>
     <clientextension.api.version>2.1.4.0-10</clientextension.api.version>
-    <webcomponent.version>2.0.3</webcomponent.version>
+    <service.api.version>2.25.1.0-1</service.api.version>
+    <service.api.impl.version>7.0.19.0-1</service.api.impl.version>
   </properties>
   
   <parent>
     <groupId>edu.planon.pom</groupId>
-    <artifactId>pomEnterprise</artifactId>
-    <version>1</version>
+    <artifactId>pomBase</artifactId>
+    <version>5</version>
   </parent>
   
   <groupId>edu.calpoly.afd.planon.locksandkeys.wcx</groupId>
   <artifactId>LocksAndKeys-WCX</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <packaging>bundle</packaging>
   
   <name>LocksAndKeys-WCX</name>
   <dependencies>
+    <dependency>
+      <groupId>edu.planon.lib.client</groupId>
+      <artifactId>Client-Utils</artifactId>
+      <version>2.0.0</version>
+    </dependency>
     
     <dependency>
       <groupId>edu.planon.lib.common</groupId>
       <artifactId>PL-Base-Utils</artifactId>
-      <version>2.1.1</version>
+      <version>3.0.0</version>
     </dependency>
     
     <dependency>
-      <groupId>com.planonsoftware.tms.components.client</groupId>
-      <artifactId>WebComponents</artifactId>
-      <version>${webcomponent.version}</version>
+      <groupId>edu.planon.lib</groupId>
+      <artifactId>ESAPI-Utils</artifactId>
+      <version>1.1.0</version>
     </dependency>
     
     <dependency>
@@ -39,22 +45,32 @@
     </dependency>
     
     <dependency>
-      <groupId>com.planonsoftware.tms.pom</groupId>
-      <artifactId>wicket-deps</artifactId>
-      <version>3</version>
-      <type>pom</type>
-      <scope>provided</scope>
+      <groupId>com.planonsoftware</groupId>
+      <artifactId>enterprise.service.api</artifactId>
+      <version>${service.api.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>com.planonsoftware.tms.lib.client</groupId>
-      <artifactId>client.api.utils</artifactId>
-      <version>1.0.4</version>
+      <groupId>com.planonsoftware</groupId>
+      <artifactId>enterprise.service.api.impl</artifactId>
+      <version>${service.api.impl.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>edu.planon.pom</groupId>
+      <artifactId>pomWicket</artifactId>
+      <version>5</version>
+      <type>pom</type>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   
   <build>
     <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
       <resource>
         <directory>src/main/java</directory>
           <excludes>
@@ -67,7 +83,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven.bundle.plugin.version}</version>
+        <version>3.5.0</version>
         <extensions>true</extensions>
         <configuration>
           <finalName>${project.artifactId}-${project.version}</finalName>
@@ -78,7 +94,7 @@
             <Private-Package>${groupId}.wcx.*</Private-Package>
             <Export-Package>!${project.groupId}.*</Export-Package>
             <!-- <Export-Package>!javax.*,!com.planon.tms.*</Export-Package> -->
-            <Import-Package>org.apache.wicket.*,org.apache.wicket.markup.html.panel.*;version=!,!javax.jcr.*,!javax.servlet.*,!org.slf4j,!org.apache.*,
+            <Import-Package>org.apache.wicket.*,!javax.jcr.*,!javax.servlet.*,!org.slf4j,!org.apache.*,
               !nl.planon.ares,!nl.planon.hades.beans,!nl.planon.hades.client.resourceinitiators,
               !nl.planon.hades.client.resourcelocators.login,!nl.planon.hades.valueobject.state,
               !nl.planon.hades.field.definition,org.osgi.framework,!nl.planon.enterprise.service.api.impl,!javax.xml.*,!javax.security.*,
@@ -87,11 +103,9 @@
               nl.planon.enterprise.service.api.factory.*;version=!,
               !nl.planon.json.server.container.services.common.*;version=!,
               !nl.planon.json.server.container.services.interfaces.*;version=!,
-              !com.planonsoftware.tms.lib.client,
               *
             </Import-Package>
-            <Embed-Dependency>WebComponents,configuration,client.api.utils,PL-Base-Utils;scope=compile|runtime</Embed-Dependency>
-            <!-- <Embed-Dependency>WebComponents,configuration,client.api.utils;scope=compile|runtime</Embed-Dependency> -->
+            <Embed-Dependency>ESAPI-Utils,Client-Utils,PL-Base-Utils;scope=compile|runtime</Embed-Dependency>
             <Embed-Directory>lib</Embed-Directory>
             <Embed-Transitive>true</Embed-Transitive>
           </instructions>

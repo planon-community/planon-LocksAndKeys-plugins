@@ -1,11 +1,14 @@
 package edu.calpoly.afd.planon.locksandkeys.wcx;
 
-import java.util.*;
-import org.osgi.framework.*;
+import java.util.ArrayList;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
 	@SuppressWarnings("rawtypes")
-	private final List<ServiceRegistration> serviceRegisterList = new ArrayList<>();
+	private final ArrayList<ServiceRegistration> serviceRegisterList = new ArrayList<ServiceRegistration>();
 	
 	@Override
 	public void start(BundleContext aContext) {
@@ -14,9 +17,8 @@ public class Activator implements BundleActivator {
 		// to be given when the CUX gets configured in the field definer against a Business Object
 		// in the Planon Application.
 		
-		this.serviceRegisterList.add(aContext.registerService(BulkAddKeysExtension.class.getName(), new BulkAddKeysExtension(), null));
+		this.serviceRegisterList.add(aContext.registerService(BulkAddKeysWCX.class.getName(), new BulkAddKeysWCX(), null));
 	}
-		
 	
 	@SuppressWarnings("rawtypes")
 	@Override
